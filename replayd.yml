@@ -16,7 +16,7 @@
         - golang-go
         - git
         - go-dep
-    - name: create go directories in home
+    - name: create go directories
       file:
         path: "{{item}}"
         state: directory

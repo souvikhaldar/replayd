@@ -41,7 +41,7 @@ func StoreInBuffer(w http.ResponseWriter, r *http.Request) {
 // ReadFromBuffer responds with the in-memory buffer data
 func ReadFromBuffer(w http.ResponseWriter, r *http.Request) {
 	log.Println("--Running in ReadFromBuffer--")
-	fmt.Fprintf(w, b.String())
+	fmt.Fprintln(w, b.String())
 	return
 }
 func main() {
