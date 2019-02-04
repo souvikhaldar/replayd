@@ -1,0 +1,94 @@
+---
+- name: Spin-up replayd on ubuntu server
+  hosts: ubuntu
+  gather_facts: False
+  vars:
+    golang_env:
+      GOPATH: /home/ubuntu/Development/go
+  become: yes
+  tasks:
+    - name: Install dependencies for replayd server
+      apt:
+        name: "{{ item }}"
+        update_cache: yes
+        state: present
+      with_items:
+        - golang-go
+        - git
+        - go-dep
+    - name: create go directories in home
+      file:
+        path: "{{item}}"
+        state: directory
+        mode: 0775
+      with_items:
+      - "{{ golang_env.GOPATH }}/src"
+      - "{{ golang_env.GOPATH }}/bin"
+
+   # - name: modify .bashrc
+    #  blockinfile:
+     #   dest: "~/.bashrc"
+      #  block: |
+       #   export GOPATH=/home/ubuntu/Development/go
+        #  export GOBIN=$GOPATH/bin
+         # export PATH=$GOBIN:$PATH:/usr/local/go/bin
+       # marker: '# {mark} ANSIBLE MANAGED BLOCK - changes for golang'
+        #insertafter: EOF
+        #create: yes 
+    
+   # - name: modify go env
+   #   lineinfile:
+   #     path: ~/.profile
+   #     line: "export GOPATH={{GOPATH}}"
+   #  
+
+    #- name: update profile
+     # lineinfile:
+      #  dest: ~/.profile
+       # line: 'export GOPATH=/home/ubuntu/Development/go'
+    
+  #  - name: source ~/.profile
+   #   shell: source ~/.profile
+    #  args:
+     #   executable: /bin/bash
+
+    - name: Synchronize source code
+      synchronize:
+        mode: push
+        src: .
+        dest: "{{golang_env.GOPATH}}/src"
+        
+
+    #- name: Install dep 
+    # shell: go get github.com/golang/dep/cmd/dep
+    
+    - name: Synchronize dependencies
+      shell: dep ensure
+      args:
+        chdir: "{{golang_env.GOPATH}}/src/replayd"
+      environment: "{{golang_env}}"
+    
+    - name: Compile the server
+      shell: go install
+      args:
+        chdir: "{{ golang_env.GOPATH }}/src/replayd/cmd/httpServer/"
+      environment: "{{golang_env}}"
+
+    - name: Copy unit file
+      copy:
+        src: /Users/souvikhaldar/Development/go/src/github.com/souvikhaldar/replayd/replayd.service
+        dest: /lib/systemd/system/
+        mode: 0644
+
+    - name: enable replayd service 
+      shell: systemctl enable replayd.service
+      args:
+        chdir: "{{ golang_env.GOPATH }}/src/replayd"
+      
+    - name: start replayd service 
+      shell: systemctl start replayd.service
+      args:
+        chdir: "{{ golang_env.GOPATH }}/src/replayd"
+    
+
+      

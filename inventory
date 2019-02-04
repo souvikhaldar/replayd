@@ -1,0 +1,4 @@
+[ubuntu]
+34.219.22.227 ansible_ssh_user=ubuntu
+[ubuntu:vars]
+ansible_python_interpreter=/usr/bin/python3

@@ -48,5 +48,5 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", StoreInBuffer).Methods("POST")
 	router.HandleFunc("/", ReadFromBuffer).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8192", router))
+	log.Fatal(http.ListenAndServe(":80", router))
 }

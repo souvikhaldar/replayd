@@ -1,0 +1,10 @@
+[Unit]
+Description = replayd http server
+
+[Service]
+Environment = "GOPATH=/root/Development/go"
+ExecStart= /home/ubuntu/Development/go/bin/httpServer
+Restart = always
+
+[Install]
+WantedBy = multi-user.target
