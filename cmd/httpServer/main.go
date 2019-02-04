@@ -9,10 +9,15 @@ import (
 	"sync"
 
 	"github.com/gorilla/mux"
+	"github.com/souvikhaldar/replayd/pkg/configloader"
 )
 
+var conf configloader.Config
+
 func init() {
+	log.Println("---replayd running---")
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	configloader.Load("/etc/replayd/config.json", &conf)
 }
 
 var b bytes.Buffer
@@ -48,5 +53,5 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", StoreInBuffer).Methods("POST")
 	router.HandleFunc("/", ReadFromBuffer).Methods("GET")
-	log.Fatal(http.ListenAndServe(":80", router))
+	log.Fatal(http.ListenAndServe(":"+conf.Port, router))
 }
