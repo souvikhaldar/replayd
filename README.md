@@ -7,7 +7,7 @@ Enter IP of the target host and username in the inventory file. Then run `./depl
 Check the accessibility of the target host by running `./ping.bash <targethostname>`. Eg. `./ping.bash ubuntu`.
 
 ## Check logs of the replayd http server
-Read the logs of the server by using `././readLogs.bash <username> <target_ip> <type>`. Eg. `./readLogs.bash ubuntu 34.219.22.227 -f`
+Read the logs of the server by using `./readLogs.bash <username> <target_ip> <type>`. Eg. `./readLogs.bash ubuntu 34.219.22.227 -f`
 
 ## Read data from the buffer
 
