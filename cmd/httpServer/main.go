@@ -21,6 +21,7 @@ func init() {
 }
 
 var b bytes.Buffer
+var backup []string
 
 // StoreInBuffer stores the incoming data to in-memory buffer
 func StoreInBuffer(w http.ResponseWriter, r *http.Request) {
@@ -31,6 +32,7 @@ func StoreInBuffer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println("Body recieved: ", string(body))
+	backup = append(backup, string(body)+"\n")
 	mux := &sync.Mutex{}
 	mux.Lock()
 	if _, e := b.Write(body); e != nil {
@@ -59,10 +61,17 @@ func DeleteBuffer(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Fprint(w, fmt.Sprintf("Deleted: %s", string(buf)))
 }
+
+func Backup(w http.ResponseWriter, r *http.Request) {
+	log.Println("--Reading backup data--")
+	fmt.Fprintln(w, fmt.Sprintf("Rescued data: %s", backup))
+	return
+}
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", StoreInBuffer).Methods("POST")
 	router.HandleFunc("/", ReadFromBuffer).Methods("GET")
 	router.HandleFunc("/", DeleteBuffer).Methods("DELETE")
+	router.HandleFunc("/backup", Backup).Methods("GET")
 	log.Fatal(http.ListenAndServe(":"+conf.Port, router))
 }
