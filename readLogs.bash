@@ -1,4 +1,4 @@
 #!/bin/bash
 echo "---reading logs from replayd http cache server---"
-ssh $1@$2 "journalctl -u replayd.service $3"
+ssh ubuntu@34.219.22.227 "journalctl -u replayd.service $1"
 

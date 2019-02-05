@@ -50,9 +50,19 @@ func ReadFromBuffer(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, b.String())
 	return
 }
+
+func DeleteBuffer(w http.ResponseWriter, r *http.Request) {
+	log.Println("--Running in DeleteBuffer--")
+	buf := make([]byte, b.Len())
+	if _, e := b.Read(buf); e != nil {
+		http.Error(w, e.Error(), 500)
+	}
+	fmt.Fprint(w, fmt.Sprintf("Deleted: %s", string(buf)))
+}
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", StoreInBuffer).Methods("POST")
 	router.HandleFunc("/", ReadFromBuffer).Methods("GET")
+	router.HandleFunc("/", DeleteBuffer).Methods("DELETE")
 	log.Fatal(http.ListenAndServe(":"+conf.Port, router))
 }
