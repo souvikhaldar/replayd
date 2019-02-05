@@ -65,7 +65,6 @@
       shell: systemctl enable replayd.service
       args:
         chdir: "{{ golang_env.GOPATH }}/src/github.com/souvikhaldar/replayd"
-      
     - name: start replayd service 
       shell: systemctl start replayd.service
       args:

@@ -37,16 +37,17 @@ func StoreInBuffer(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, e.Error(), 500)
 		return
 	}
+	b.WriteString("\n")
 	mux.Unlock()
 	fmt.Println("Inserted: ", string(body))
-	fmt.Fprintf(w, "Successfully inserted data to buffer")
+	fmt.Fprintf(w, "Successfully inserted data to buffer\n")
 	return
 }
 
 // ReadFromBuffer responds with the in-memory buffer data
 func ReadFromBuffer(w http.ResponseWriter, r *http.Request) {
 	log.Println("--Running in ReadFromBuffer--")
-	fmt.Fprintln(w, b.String())
+	fmt.Fprint(w, b.String())
 	return
 }
 func main() {
