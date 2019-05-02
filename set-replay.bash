@@ -1,3 +1,3 @@
-echo 'Address recieved: ' $1
-echo 'Data recieved: ' $2
-curl -XPOST $1 -d "$2"
+#echo 'Address recieved: ' $1
+echo 'Data recieved: ' $1
+curl -XPOST http://54.189.131.192/ -d "$1"

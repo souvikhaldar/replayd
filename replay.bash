@@ -1,2 +1,2 @@
 #!/bin/bash
-curl -XGET $1
+curl -XGET http://54.189.131.192
